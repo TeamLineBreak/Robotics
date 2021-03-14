@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-<<<<<<< HEAD
-import edu.wpi.first.wpilibj.*;
-=======
 import edu.wpi.first.wpilibj.RobotBase;
->>>>>>> c9fea6a (added new codebase)
 
 /**
  * Do NOT add any static variables to this class, or any initialization at all. Unless you know what
@@ -25,11 +21,5 @@ public final class Main {
    */
   public static void main(String... args) {
     RobotBase.startRobot(Robot::new);
-<<<<<<< HEAD
-
   }
-  
-=======
-  }
->>>>>>> c9fea6a (added new codebase)
 }
