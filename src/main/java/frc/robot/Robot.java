@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    joy.setXChannel(5);
+    //joy.setXChannel(5);
   }
   
   @Override
@@ -32,9 +32,9 @@ public class Robot extends TimedRobot {
     // That means that the Y axis drives forward
     // and backward, and the X turns left and right.
     //m_robotDrive.arcadeDrive(m_stick.getY(), m_stick.getX());
-    leftMotor1.set(joy.getY());
-    leftMotor2.set(joy.getY());
-    rightMotor1.set(joy.getX() * -1);
-    rightMotor2.set(joy.getX() * -1);
+    leftMotor1.set(joy.getY() + joy.getX());
+    leftMotor2.set(joy.getY() + joy.getX());
+    rightMotor1.set(joy.getY()  - joy.getX());
+    rightMotor2.set(joy.getY()  - joy.getX());
   }
 }
