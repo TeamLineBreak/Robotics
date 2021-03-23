@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -28,17 +24,17 @@ public class Robot extends TimedRobot {
     mult = -1;
     //reduce the turn speed by 43 percent to increace control
     turnSpeed = .57;
-    //sets z axis to the right bumpber for the tank drve.
+    //sets z axis to the rt for the tank drve.
     joy.setZChannel(3);
   }
   
   @Override
   public void teleopPeriodic() {
-    //if rb is pressed then switch the robot forward direction
+    //if r1 is pressed then switch the robot forward direction
     if(joy.getRawButtonPressed(6)) {
       mult *= -1;
     }
-    //if lb is pressed change increas the turn speed to make sharper turns while moving and rereduce the turnspeed on release.
+    //if l1 is pressed change increas the turn speed to make sharper turns while moving and rereduce the turnspeed on release.
     if(joy.getRawButtonPressed(5)) {
       turnSpeed = .85;
     }
@@ -58,6 +54,8 @@ public class Robot extends TimedRobot {
    */
   public void tankDrive(Joystick joy, int mult, double turnSpeed) {
     //driving code for going forward.
+    //axis 2 is the axis for lt. So when lt is pressed the robot will go in reverse.
+    // driving algorithim is handled as ((Speed axis - reverse axis) +- turn axis*turnSpeed) * multiplier
     if(joy.getRawAxis(2) == 0 ^ mult == 1) {
       leftMotor1.set(((joy.getZ() - joy.getRawAxis(2)) + joy.getX()*turnSpeed) * mult);
       leftMotor2.set(((joy.getZ() - joy.getRawAxis(2)) + joy.getX()*turnSpeed) * mult);
