@@ -18,12 +18,16 @@ public class Robot extends TimedRobot {
   private final PWMSparkMax leftMotor1 = new PWMSparkMax(3);
   private final PWMSparkMax leftMotor2 = new PWMSparkMax(4);
   private final Joystick joy = new Joystick(0);
+  private int mult;
+  private double turnSpeed;
   //private final DifferentialDrive robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
   //private final Joystick m_stick = new Joystick(0);
 
   @Override
   public void robotInit() {
-    //joy.setXChannel(5);
+    mult = -1;
+    turnSpeed = .57;
+    joy.setZChannel(3);
   }
   
   @Override
@@ -32,9 +36,26 @@ public class Robot extends TimedRobot {
     // That means that the Y axis drives forward
     // and backward, and the X turns left and right.
     //m_robotDrive.arcadeDrive(m_stick.getY(), m_stick.getX());
-    leftMotor1.set(joy.getY() + joy.getX());
-    leftMotor2.set(joy.getY() + joy.getX());
-    rightMotor1.set(joy.getY()  - joy.getX());
-    rightMotor2.set(joy.getY()  - joy.getX());
+    if(joy.getRawButtonPressed(6)) {
+      mult *= -1;
+    }
+    if(joy.getRawButtonPressed(5)) {
+      turnSpeed = .85;
+    }
+    if(joy.getRawButtonReleased(5)) {
+      turnSpeed = .57;
+    }
+    if(joy.getRawAxis(2) == 0 ^ mult == 1) {
+      leftMotor1.set(((joy.getZ() - joy.getRawAxis(2)) + joy.getX()*turnSpeed) * mult);
+      leftMotor2.set(((joy.getZ() - joy.getRawAxis(2)) + joy.getX()*turnSpeed) * mult);
+      rightMotor1.set(((joy.getZ() - joy.getRawAxis(2))  - joy.getX()*turnSpeed) * -1 * mult);
+      rightMotor2.set(((joy.getZ() - joy.getRawAxis(2))  - joy.getX()*turnSpeed) * -1 * mult);
+    }
+    else {
+      leftMotor1.set(((joy.getZ() - joy.getRawAxis(2)) - joy.getX()*turnSpeed) * mult);
+      leftMotor2.set(((joy.getZ() - joy.getRawAxis(2)) - joy.getX()*turnSpeed) * mult);
+      rightMotor1.set(((joy.getZ() - joy.getRawAxis(2))  + joy.getX()*turnSpeed) * -1 * mult);
+      rightMotor2.set(((joy.getZ() - joy.getRawAxis(2))  + joy.getX()*turnSpeed) * -1 * mult);
+    }
   }
 }
