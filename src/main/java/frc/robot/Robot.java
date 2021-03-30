@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMSparkMax;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 /**
@@ -15,8 +16,11 @@ public class Robot extends TimedRobot {
   private final PWMSparkMax leftMotor2 = new PWMSparkMax(4);
   private final PWMVictorSPX guideMotor = new PWMVictorSPX(5);
   private final PWMVictorSPX FlyWheel = new PWMVictorSPX(6);
+  private final Servo leftServo = new Servo(9);
+  private final Servo rightServo = new Servo(8);
   private int autoPhase;
   private Joystick joy;
+  private Joystick joy2;
   private int mult;
   private double turnSpeed;
   private double testSpeed;
@@ -26,6 +30,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     //initalize the joystick
     joy = new Joystick(0);
+    joy2 = new Joystick(0);
     //set the robot heading to backwards, which is the battery side
     mult = -1;
     //reduce the turn speed by 43 percent to increace control
@@ -36,6 +41,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     //sets z axis to the rt for the tank drve.
     joy.setZChannel(3);
+    joy2.setXChannel(4);
+    joy2.setYChannel(5);
   }
   
   @Override
@@ -53,6 +60,7 @@ public class Robot extends TimedRobot {
     }
     //move the robot
     tankDrive(joy, mult, turnSpeed);
+    moveServos(Math.abs(joy2.getY()*.3));
   }
 
   @Override
@@ -83,11 +91,15 @@ public class Robot extends TimedRobot {
         autoDrive(.2, .2);
         break;
       case 2:
-        //leftMotor1.set(.37);
-        //rightMotor2.set(.37);
-        //guideMotor.set(.37);
-        //FlyWheel.set(-.3);
+        //autoDrive(.2, .2);
+        //guideMotor.set(-.37);
+        //FlyWheel.set(-0.40);
+        leftServo.setPosition(1); //1
+        rightServo.setPosition(0); //0
         break;
+      case 3:
+        System.out.println("right: " + rightServo.getAngle());
+        System.out.println("left: " + leftServo.getAngle());
     }
     
   }
@@ -126,9 +138,9 @@ public class Robot extends TimedRobot {
    */
   public void drive(double leftSpeed, double rightSpeed) {
     leftMotor1.set(-leftSpeed);
-    //leftMotor2.set(-leftSpeed);
+    leftMotor2.set(-leftSpeed);
     rightMotor1.set(rightSpeed);
-    //rightMotor2.set(rightSpeed);
+    rightMotor2.set(rightSpeed);
   }
 
   /**
@@ -141,5 +153,10 @@ public class Robot extends TimedRobot {
     leftMotor2.set(-leftSpeed);
     rightMotor1.set(rightSpeed);
     rightMotor2.set(rightSpeed);
-  } 
+  }
+
+  public void moveServos(double position) {
+    leftServo.setPosition(1-position);
+    rightServo.setPosition(position);
+  }
 }
