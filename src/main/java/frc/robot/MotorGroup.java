@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.PWMSparkMax;
 /**
  * A class for creating and managing an aray of motors
  */
-public class MotorArray {
+public class MotorGroup {
 
     private ArrayList<PWMSparkMax> motors;
 
@@ -16,7 +16,8 @@ public class MotorArray {
      * @param m1 first motor *rquired*
      * @param mN other motors, optional
      */
-    public MotorArray(PWMSparkMax m1, PWMSparkMax... mN) {
+    public MotorGroup(PWMSparkMax m1, PWMSparkMax... mN) {
+        motors = new ArrayList<PWMSparkMax>();
         motors.add(m1);
         for (PWMSparkMax m : mN) {
             motors.add(m);

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class AutoDriveUtil {
     
-    private ArrayList<MotorArray> MotorArrayArray;
+    private ArrayList<MotorGroup> MotorArrayArray;
 
-    public AutoDriveUtil(MotorArray m1, MotorArray ... mN) {
+    public AutoDriveUtil(MotorGroup m1, MotorGroup ... mN) {
         MotorArrayArray.add(m1);
-        for(MotorArray m : mN) {
+        for(MotorGroup m : mN) {
             MotorArrayArray.add(m);
         }
     }
