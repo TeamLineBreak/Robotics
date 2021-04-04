@@ -10,21 +10,21 @@ import frc.robot.subsystems.Drive;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class DriveGoup extends SequentialCommandGroup {
+public class CourseOneGoup extends SequentialCommandGroup {
   /** Creates a new DriveGoup. */
-  public DriveGoup(Drive driveSub) {
+  public CourseOneGoup(Drive driveSub) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveCommand(driveSub, .8).withTimeout(1.23), 
-      new TurnCommand(driveSub, .8, -.6).withTimeout(1.65),
-      new DriveCommand(driveSub, .8).withTimeout(.25),
-      new TurnCommand(driveSub, .8, -.8).withTimeout(.39),
-      new DriveCommand(driveSub, .8).withTimeout(.85),
-      new TurnCommand(driveSub, .8, .6).withTimeout(1.7),
-      new DriveCommand(driveSub, .8).withTimeout(.1),
-      new TurnCommand(driveSub, .8, .8).withTimeout(.3),
-      new DriveCommand(driveSub, .8).withTimeout(.5)
+      new AutoDriveCommand(driveSub, .8).withTimeout(1.23), 
+      new DualTurnCommand(driveSub, .8, -.6).withTimeout(1.65),
+      new AutoDriveCommand(driveSub, .8).withTimeout(.25),
+      new DualTurnCommand(driveSub, .8, -.8).withTimeout(.39),
+      new AutoDriveCommand(driveSub, .8).withTimeout(.85),
+      new DualTurnCommand(driveSub, .8, .6).withTimeout(1.7),
+      new AutoDriveCommand(driveSub, .8).withTimeout(.1),
+      new DualTurnCommand(driveSub, .8, .8).withTimeout(.3),
+      new AutoDriveCommand(driveSub, .8).withTimeout(.5)
     );
   }
 }

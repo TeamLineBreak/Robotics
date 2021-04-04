@@ -13,12 +13,15 @@ public class Drive extends SubsystemBase {
   private PWMSparkMax leftMotor;
   private PWMSparkMax rightMotor;
   private DifferentialDrive driver;
-  private double speed, radius;
+  private double speed, radius, turnMult;
+  private int mult;
   
   public Drive() {
     leftMotor = new PWMSparkMax(3);
     rightMotor = new PWMSparkMax(1);
     driver = new DifferentialDrive(leftMotor, rightMotor);
+    mult = 1;
+    turnMult = 1;
   }
 
   public void setSpeed(double speed) {
@@ -29,9 +32,25 @@ public class Drive extends SubsystemBase {
     this.radius = radius;
   }
 
+  public void setMult(int mult) {
+    this.mult = mult;
+  }
+
+  public void setTurnMult(double turnMult) {
+    this.turnMult = turnMult;
+  }
+  
+  public int getMult() {
+    return mult;
+  }
+
+  public double getTurnMult() {
+    return turnMult;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    driver.curvatureDrive(speed, radius, false);
+    driver.curvatureDrive(speed*mult, radius*turnMult, false);
   }
 }

@@ -4,14 +4,23 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.DriveGoup;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AutoDriveCommand;
+import frc.robot.commands.DualTurnCommand;
+import frc.robot.commands.TeleFlipCommand;
+import frc.robot.commands.TeleTurnMultCommand;
+import frc.robot.commands.toggleFlyWheel;
+import frc.robot.commands.toggleGuideWheel;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,11 +30,12 @@ import frc.robot.commands.DriveGoup;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private DriveGoup m_driveGroup;
-
   private RobotContainer m_robotContainer;
-
   private SendableChooser m_autonomousChooser;
+  private Drive driveSub;
+  private Shoot shootSub;
+
+  private Joystick joy;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -36,6 +46,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    driveSub = m_robotContainer.getDriveSub();
+    shootSub = m_robotContainer.getShootSub();
     m_autonomousChooser = new SendableChooser();
     m_autonomousChooser.setDefaultOption("Drive Forword", m_robotContainer.getDriveGoup());
     m_autonomousChooser.addOption("temp", m_robotContainer.getDriveGoup());
@@ -77,7 +89,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    CommandBase temp = new DriveCommand(m_robotContainer.getDriveSub(), -.1);
+    CommandBase temp = new AutoDriveCommand(driveSub, -.1);
     temp.withTimeout(.2).runsWhenDisabled();
   }
 
@@ -95,11 +107,33 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    driveSub.setTurnMult(.57);
+    initJoystick();
+  }
+
+  @SuppressWarnings("unused")
+  private void initJoystick() {
+    joy = new Joystick(0);
+    Button reverse = new JoystickButton(joy, 6)
+      .whenPressed(new TeleFlipCommand(driveSub));
+    Button drift = new JoystickButton(joy, 5)
+      .whenPressed(new TeleTurnMultCommand(driveSub, .85))
+      .whenReleased(new TeleTurnMultCommand(driveSub, .57));
+    Button guideToggle = new JoystickButton(joy, 1)
+      .whenPressed(new toggleGuideWheel(shootSub, .8));
+    Button flyToggle1 = new JoystickButton(joy, 2)
+      .whenPressed(new toggleFlyWheel(shootSub, 1));
+    Button flyToggle08 = new JoystickButton(joy, 3)
+      .whenPressed(new toggleFlyWheel(shootSub, .8));
+    Button flyToggle06 = new JoystickButton(joy, 3)
+      .whenPressed(new toggleFlyWheel(shootSub, .6));
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    new DualTurnCommand(driveSub, (joy.getRawAxis(3) - joy.getRawAxis(2)), Math.pow(joy.getX(), 2) * (Math.signum(joy.getX()) * -1)).schedule();
+  }
 
   @Override
   public void testInit() {

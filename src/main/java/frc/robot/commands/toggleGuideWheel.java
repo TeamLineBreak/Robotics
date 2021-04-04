@@ -5,44 +5,42 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shoot;
 
-public class TurnCommand extends CommandBase {
-  /** Creates a new TurnCommand. */
+public class toggleGuideWheel extends CommandBase {
+  /** Creates a new setGuideWheel. */
 
-  private Drive driveSub;
-  private double speed, radius;
+  private double targetSpeed;
+  private Shoot shootSub;
 
-  public TurnCommand(Drive driveSub, double speed, double radius) {
+  public toggleGuideWheel(Shoot shootSub, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.driveSub = driveSub;
-    this.speed = speed;
-    this.radius = radius;
+    this.shootSub = shootSub;
+    if(shootSub.getGuideWheelSpeed() == 0) {
+      targetSpeed = speed;
+    }
+    else {
+      targetSpeed = 0;
+    }
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveSub.setSpeed(speed);
-    driveSub.setRadius(radius);
+    shootSub.setGuideWheelSpeed(targetSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    driveSub.setSpeed(0);
-    driveSub.setRadius(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return shootSub.getGuideWheelSpeed() == targetSpeed;
   }
 }

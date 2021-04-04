@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
-import frc.robot.commands.DriveGoup;
+import frc.robot.commands.CourseOneGoup;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Shoot;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,7 +22,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final Drive driveSub = new Drive();
-  private final CommandGroupBase driveGoup = new DriveGoup(driveSub);
+  private final Shoot shootSub = new Shoot();
+  private final CommandGroupBase driveGoup = new CourseOneGoup(driveSub);
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -35,6 +37,10 @@ public class RobotContainer {
 
   public Drive getDriveSub() {
     return driveSub;
+  }
+
+  public Shoot getShootSub() {
+    return shootSub;
   }
 
   /**
